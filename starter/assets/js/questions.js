@@ -1,5 +1,5 @@
 
-const totalScore = document.getElementById("total-score");
+
 const questionText = document.getElementById("question-title");
 var currentQuestion = 0;
 var userScore = 0;
@@ -61,6 +61,7 @@ let questions = [
         ]
     }
  ]
+ const totalScore = questions.length;
  var element = document.getElementById("start");
  element.addEventListener("click", beginQuiz);
  //choices.addEventListener("click",submit);
@@ -74,10 +75,14 @@ let questions = [
     loadQuestion(currentQuestion);
  }
   function loadQuestion(currentQuestion)
-  {
+  { 
+    
+    console.log("Loading..");
+    
     questionText.innerHTML = '';
     // totalScore.innerHTML = questions.length;
     questionText.innerHTML = questions[currentQuestion].question;
+    console.log(questionText.innerHTML);
     var correctAnswer = questions[currentQuestion].answer;
 //     <button id="myBtn" value="myvalue" onclick="myFunction()">Try it</button>
 //     const btn = document.createElement("BUTTON");
@@ -85,45 +90,76 @@ let questions = [
 //  document.body.appendChild(btn);
 
 // Create buttons for answer choices
-
     var choices = document.getElementById("choices");
+    
     const Option1 = document.createElement("Button");
     choices.appendChild(Option1)
     Option1.innerHTML = questions[currentQuestion].answers[0].option;
-    
-    
+    Option1.dataset.answer=1;
+    Option1.addEventListener("click", (Option1) => { clickedBtn = event.target
+     checkAnswer(clickedBtn.dataset.answer, correctAnswer);
+     });
+  
 
     
     const Option2 = document.createElement("Button");
     choices.appendChild(Option2)
     Option2.innerHTML = questions[currentQuestion].answers[1].option;
-    Option2.id = 2;
-    
-    // Option2.onClick = checkAnswer(Option2.id, correctAnswer);
+    Option2.dataset.answer=2;
+    Option2.addEventListener("click", (Option2) => { clickedBtn = event.target
+     checkAnswer(clickedBtn.dataset.answer, correctAnswer);
+     });
 
+
+   
     const Option3 = document.createElement("Button");
     choices.appendChild(Option3)
     Option3.innerHTML = questions[currentQuestion].answers[2].option;
-    Option3.id = 3;
-
-    // Option3.onClick = checkAnswer(Option3.id, correctAnswer);
+    Option3.dataset.answer=3;
+    Option3.addEventListener("click", (Option2) => { clickedBtn = event.target
+     checkAnswer(clickedBtn.dataset.answer, correctAnswer);
+     });
 
     const Option4 = document.createElement("Button")
     choices.appendChild(Option4)
     Option4.innerHTML = questions[currentQuestion].answers[3].option;
-    Option4.id = 4;
+    Option4.dataset.answer=4;
+    Option4.addEventListener("click", (Option2) => { clickedBtn = event.target
+     checkAnswer(clickedBtn.dataset.answer, correctAnswer);
+     });
+  
 
-    Option4.onClick = logClick();
-  }
-    function logClick()
-    {
-      console.log("Clicked");
-    };
+// var buttons = document.getElementById("choices"); //returns a nodelist
+// for (var i= 0; i < buttons.length; i++)
+// {
+//     (function(index){
+//         buttons[index].addEventListener("click",function(index)
+//     })
+// }
+// choices.addEventListener("click", function(this.value)
 
-var buttons = document.getElementById("choices"); //returns a nodelist
+// {
+//     alert("clicked");
+//     console.log(value)
+// });
+// }
 
-choices.addEventListener("click", checkAnswer(this, correctAnswer));
+// var buttons = document.getElementById('choices');
+// console.log(buttons);
+//  for (var i=0 ; i < buttons.length ; i++)
+//  {    
+//     console.log("hi");         
+//     buttons[i].addEventListener("click", function()
+//     {
+//         alert("I am button ");
+//     });
+            
+//  }
 
+
+ }
+        
+        
 // document.getElementById("choices").onclick = function(this)
 // {
 //     console.log(this);
@@ -144,30 +180,41 @@ choices.addEventListener("click", checkAnswer(this, correctAnswer));
 
 
     //choices.addEventListener("click", checkAnswer(id, correctAnswer));
- }
+  
+
  function checkAnswer(givenAnswer, correctAnswer) {
     // This is the function that will run, when clicked on one of the answers
     // Check if givenAnswer is sams as the correct one
     // After this, check if it's the last question:
     // If it is: empty the answerArea and let them know it's done.
-    
-        console.log(givenAnswer);
-        console.log(correctAnswer);
+    //alert("Clicked");
+        console.log("Given answer:" + givenAnswer);
+        console.log("Actual answer:" + correctAnswer);
       if (givenAnswer == correctAnswer) {
         userScore ++;      
-        //console.log(userScore);
+        console.log("Score: " + userScore);
       } else {
-        userScore = userScore;                        
+        userScore = userScore;  
+        console.log("Score:" + userScore);                      
       }
       
-    //   if (currentQuestion < 4) {
-    //     currentQuestion += 1;
-        
-    //     loadQuestion( currentQuestion);
-    //   } else {
-    //     questionText.innerHTML = 'Done';
-    //     //answerArea.innerHTML = '';
-    //   }
+      if (currentQuestion < 4) {
     
-                              
-    }
+        currentQuestion += 1;
+        var choices = document.getElementById("choices")
+       
+        while (choices.hasChildNodes()) {
+            choices.removeChild(choices.firstChild);
+          }
+    
+        loadQuestion( currentQuestion);
+      } else {
+        var choices = document.getElementById("choices")
+       
+        while (choices.hasChildNodes()) {
+            choices.removeChild(choices.firstChild);
+        questionText.innerHTML = 'Done.Your score is:' + userScore + ' / ' + totalScore;
+        
+      }
+ }
+}
