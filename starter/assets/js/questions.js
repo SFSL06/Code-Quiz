@@ -1,8 +1,11 @@
+// To load questions
 const questionText = document.getElementById("question-title");
 var currentQuestion = 0;
 var userScore = 0;
 var userInitials;
 var scoreList = [];
+
+// Array of questions to be used in the quiz
 let questions = [
     {
         question: "Commonly used data types DO NOT Include _________",
@@ -60,131 +63,175 @@ let questions = [
         ]
     }
  ]
+
+ // Stores number of questions
  var numQuestions = questions.length;
+
+ // Keeps track of which question is being displayed and answered
  var quesCount = 1;
+
+ // Total Score, each question is for 1 mark
  const totalScore = questions.length;
+
+ // The time allowed for the test is 100 seconds
  var timeleft = 100; 
+
+ // This will give feedback for each questions
  var feedbackTxt = document.getElementById("feedback");
+
+ // This will be used to start and reset the timer
  var downloadTimer;
 
-function startTimer(timeleft, quesCount) {
+// Timer function
+function startTimer(timeleft, quesCount) 
+{
   downloadTimer = setInterval(function() 
   {
     timeleft = timeleft;
-    quesCount = quesCount;
-  
-    console.log("Time Left2:" + timeleft);
-    console.log("Ques Count2:" + quesCount);
-  
+    // Displays time remaining
     document.getElementById("time").innerHTML = timeleft;
     timeleft --;
-    console.log("Timer" + downloadTimer);
-    if(timeleft <= 0 || quesCount == questions.length){
+    
+    if(timeleft <= 0)
+      {
+      // Stops timer when time runs out or when all questions have been answered
        clearInterval(downloadTimer);
        document.getElementById("time").innerHTML = "Finished";
-       endQuiz();}
-     else
+       endQuiz();
+      }
+    else
      {
        document.getElementById("time").innerHTML = timeleft; 
      }
-   }, 1000,timeleft, quesCount);
+   }, 1000,timeleft);
 };
 
-
+// To load the quiz
  var element = document.getElementById("start");
  element.addEventListener("click", beginQuiz);
- //choices.addEventListener("click",submit);
- function beginQuiz() {
+ 
+function beginQuiz() 
+{
   //to hide start Quiz screen
     var startScreen = document.getElementById("start-screen");
     startScreen.style.display = "none";
     currentQuestion = 0;
+   
+    // To start timing the quiz
     startTimer(timeleft, quesCount);
-  
-    loadQuestion(currentQuestion);
+  // To display question
+  loadQuestion(currentQuestion);
  }
-  function loadQuestion(currentQuestion)
-  { 
-     questionText.innerHTML = '';
-    // totalScore.innerHTML = questions.length;
-    //Displays current question
-   questionText.innerHTML = questions[currentQuestion].question;
-   console.log(questionText.innerHTML);
-    var correctAnswer = questions[currentQuestion].answer;
-// Create buttons for answer choices
-    var choices = document.getElementById("choices");
+  
+ 
+function loadQuestion(currentQuestion)
+{ 
+  
+  feedbackTxt.innerHTML  = "";
+  questionText.innerHTML = '';
+  questionText.innerHTML = questions[currentQuestion].question;
+  var correctAnswer = questions[currentQuestion].answer;
+
+  // Create buttons to display and select Answer Options
+  var choices = document.getElementById("choices");
     
-    const Option1 = document.createElement("Button");
-    choices.appendChild(Option1)
-    Option1.innerHTML = questions[currentQuestion].answers[0].option;
-    Option1.dataset.answer=1;
-    Option1.addEventListener("click", (Option1) => { clickedBtn = event.target
-     checkAnswer(clickedBtn.dataset.answer, correctAnswer);
-     });
+  const Option1 = document.createElement("Button");
+  choices.appendChild(Option1)
+  Option1.innerHTML = questions[currentQuestion].answers[0].option;
+  Option1.dataset.answer=1;
+  Option1.addEventListener("click", (Option1) => { clickedBtn = event.target
+  checkAnswer(clickedBtn.dataset.answer, correctAnswer);});
       
-    const Option2 = document.createElement("Button");
-    choices.appendChild(Option2)
-    Option2.innerHTML = questions[currentQuestion].answers[1].option;
-    Option2.dataset.answer=2;
-    Option2.addEventListener("click", (Option2) => { clickedBtn = event.target
-     checkAnswer(clickedBtn.dataset.answer, correctAnswer);
-     });
+  const Option2 = document.createElement("Button");
+  choices.appendChild(Option2)
+  Option2.innerHTML = questions[currentQuestion].answers[1].option;
+  Option2.dataset.answer=2;
+  Option2.addEventListener("click", (Option2) => { clickedBtn = event.target
+  checkAnswer(clickedBtn.dataset.answer, correctAnswer);});
 
    
-    const Option3 = document.createElement("Button");
-    choices.appendChild(Option3)
-    Option3.innerHTML = questions[currentQuestion].answers[2].option;
-    Option3.dataset.answer=3;
-    Option3.addEventListener("click", (Option2) => { clickedBtn = event.target
-     checkAnswer(clickedBtn.dataset.answer, correctAnswer);
-     });
+  const Option3 = document.createElement("Button");
+  choices.appendChild(Option3)
+  Option3.innerHTML = questions[currentQuestion].answers[2].option;
+  Option3.dataset.answer=3;
+  Option3.addEventListener("click", (Option2) => { clickedBtn = event.target
+  checkAnswer(clickedBtn.dataset.answer, correctAnswer);});
 
-    const Option4 = document.createElement("Button")
-    choices.appendChild(Option4)
-    Option4.innerHTML = questions[currentQuestion].answers[3].option;
-    Option4.dataset.answer=4;
-    Option4.addEventListener("click", (Option2) => { clickedBtn = event.target
-     checkAnswer(clickedBtn.dataset.answer, correctAnswer);
-     });
+  const Option4 = document.createElement("Button")
+  choices.appendChild(Option4)
+  Option4.innerHTML = questions[currentQuestion].answers[3].option;
+  Option4.dataset.answer=4;
+  Option4.addEventListener("click", (Option2) => { clickedBtn = event.target
+  checkAnswer(clickedBtn.dataset.answer, correctAnswer);});
   
-      
-  }
+}
 
-    function nextQuestion(currentQuestion){
-      feedbackTxt.style.display = "none";
-      if (currentQuestion < numQuestions) {
-        console.log(currentQuestion);
-        console.log(numQuestions);
-        var choices = document.getElementById("choices")
+function checkAnswer(givenAnswer, correctAnswer) 
+{
+// This is the function that will run, when one of the answers is clicked
+// Check if givenAnswer is same as the correct answer
+// After this, check if it's the last question
+// If it is the last question clear the questions and options
+
+  if (givenAnswer == correctAnswer) 
+   {
+    feedbackTxt.style.display = "block";
+    feedbackTxt.innerHTML = "Correct";
+    console.log(feedbackTxt)
+    userScore ++; 
+    currentQuestion += 1;   
+    nextQuestion(currentQuestion);
+    } 
+    else {
+    feedbackTxt.style.display = "block";
+    feedbackTxt.innerHTML = "Wrong";
+    console.log(feedbackTxt)
+    userScore = userScore;  
+    currentQuestion += 1;
+    timeleft = document.getElementById("time").innerHTML;
+    //time penalty
+    timeleft = timeleft-9;
+    clearInterval(downloadTimer);
+    //reset time to 10 seconds less
+    startTimer(timeleft);
+    nextQuestion(currentQuestion);
+    }
+}   
+
+
+function nextQuestion(currentQuestion)
+{
+
+if (currentQuestion < numQuestions) 
+  {
+  // Delete current question and options
+  var choices = document.getElementById("choices")
        
-        while (choices.hasChildNodes()) {
-            choices.removeChild(choices.firstChild);
-          }
-    
-        loadQuestion(currentQuestion);
-        
-      } 
-      else {
-            
-        console.log("Ending");
-        clearInterval(downloadTimer);
-        endQuiz();
-        
-        
-      }
+  while (choices.hasChildNodes()) 
+  {
+      choices.removeChild(choices.firstChild);
+  }
+  // Display next question and options
+  loadQuestion(currentQuestion);
+  } 
+else 
+ {
+  clearInterval(downloadTimer);
+  endQuiz();
  }
+}
 
 
 function endQuiz ()
 {
   questionText.innerHTML = '';
-  // questionText.innerHTML += "Your score is:" + userScore + ' / ' + totalScore;
+  
   var choices = document.getElementById("choices")
        
-        while (choices.hasChildNodes()) {
-            choices.removeChild(choices.firstChild);
-        }
-  
+  while (choices.hasChildNodes()) {
+  choices.removeChild(choices.firstChild);
+  }
+  feedbackTxt.style.display = "none";
   var endScreen = document.getElementById("end-screen");
   endScreen.style.display = "block";
   var finalScore = document.getElementById("final-score");
@@ -196,40 +243,10 @@ function endQuiz ()
    userInitials = document.getElementById("initials");
    var initials = userInitials.value.toUpperCase()
    scoreList.push({ initials: initials, score: userScore });
+   console.log
    localStorage.setItem("scoreList", JSON.stringify(scoreList));
   });
-
   
 }
 
- function checkAnswer(givenAnswer, correctAnswer) {
-    // This is the function that will run, when clicked on one of the answers
-    // Check if givenAnswer is sams as the correct one
-    // After this, check if it's the last question:
-    // If it is: empty the answerArea and let them know it's done.
-    //alert("Clicked");
-        console.log("Given answer:" + givenAnswer);
-        console.log("Actual answer:" + correctAnswer);
-      if (givenAnswer == correctAnswer) {
-        feedbackTxt.style.display = "block";
-        feedbackTxt.innerHTML = "Correct";
-        userScore ++; 
-        quesCount ++;  
-        currentQuestion += 1;   
-        nextQuestion(currentQuestion);
-      } 
-      else {
-        feedbackTxt.style.display = "block";
-        feedbackTxt.innerHTML = "Wrong";
-        userScore = userScore;  
-        currentQuestion += 1;
-        quesCount ++;  
-        timeleft = document.getElementById("time").innerHTML;
-        timeleft = timeleft-9;
-       // resetTime = true;
-        clearInterval(downloadTimer);
-        startTimer(timeleft,quesCount);
-        nextQuestion(currentQuestion);
-                     
-      }
-     }
+ 

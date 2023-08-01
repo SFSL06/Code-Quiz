@@ -6,7 +6,8 @@ A timed, multiple-choice coding quiz that can keep track of high scores and quiz
 # Code-Quiz 
 A timed, multiple-choice questions coding quiz that can keep track of high scores and quiz-takers' initials.
 
-![Project Screenshot](assets\08-web-apis-challenge-demo.gif)
+![Project Screenshot](CodeQuiz_ScreenshotMain.jpg)
+![Project Screenshot](CodeQuiz_QuestionsPage.jpg)
 
 ## Description
 
