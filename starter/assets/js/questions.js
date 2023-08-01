@@ -1,6 +1,8 @@
 const questionText = document.getElementById("question-title");
 var currentQuestion = 0;
 var userScore = 0;
+var userInitials;
+var scoreList = [];
 let questions = [
     {
         question: "Commonly used data types DO NOT Include _________",
@@ -62,6 +64,7 @@ let questions = [
  var quesCount = 1;
  const totalScore = questions.length;
  var timeleft = 100; 
+ var feedbackTxt = document.getElementById("feedback");
  var downloadTimer;
 
 function startTimer(timeleft, quesCount) {
@@ -87,9 +90,7 @@ function startTimer(timeleft, quesCount) {
    }, 1000,timeleft, quesCount);
 };
 
-//  function timer(timeleft, quesCount, resetTime) {
-       
-//      }
+
  var element = document.getElementById("start");
  element.addEventListener("click", beginQuiz);
  //choices.addEventListener("click",submit);
@@ -150,7 +151,7 @@ function startTimer(timeleft, quesCount) {
   }
 
     function nextQuestion(currentQuestion){
-        
+      feedbackTxt.style.display = "none";
       if (currentQuestion < numQuestions) {
         console.log(currentQuestion);
         console.log(numQuestions);
@@ -176,16 +177,30 @@ function startTimer(timeleft, quesCount) {
 
 function endQuiz ()
 {
-  questionText.innerHTML = "End Of Quiz" + '<br>';
-  questionText.innerHTML += "Your score is:" + userScore + ' / ' + totalScore;
+  questionText.innerHTML = '';
+  // questionText.innerHTML += "Your score is:" + userScore + ' / ' + totalScore;
   var choices = document.getElementById("choices")
        
         while (choices.hasChildNodes()) {
             choices.removeChild(choices.firstChild);
-}
-}
+        }
+  
+  var endScreen = document.getElementById("end-screen");
+  endScreen.style.display = "block";
+  var finalScore = document.getElementById("final-score");
+  finalScore.innerHTML = userScore + '/' + totalScore;
+  finalScore.style.display = "block";
+  var submitBtn = document.getElementById("submit");
+  submitBtn.addEventListener("click", function()
+  {
+   userInitials = document.getElementById("initials");
+   var initials = userInitials.value.toUpperCase()
+   scoreList.push({ initials: initials, score: userScore });
+   localStorage.setItem("scoreList", JSON.stringify(scoreList));
+  });
 
-
+  
+}
 
  function checkAnswer(givenAnswer, correctAnswer) {
     // This is the function that will run, when clicked on one of the answers
@@ -196,12 +211,16 @@ function endQuiz ()
         console.log("Given answer:" + givenAnswer);
         console.log("Actual answer:" + correctAnswer);
       if (givenAnswer == correctAnswer) {
+        feedbackTxt.style.display = "block";
+        feedbackTxt.innerHTML = "Correct";
         userScore ++; 
         quesCount ++;  
         currentQuestion += 1;   
         nextQuestion(currentQuestion);
       } 
       else {
+        feedbackTxt.style.display = "block";
+        feedbackTxt.innerHTML = "Wrong";
         userScore = userScore;  
         currentQuestion += 1;
         quesCount ++;  
