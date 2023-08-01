@@ -127,8 +127,7 @@ function beginQuiz()
 function loadQuestion(currentQuestion)
 { 
   
-  feedbackTxt.innerHTML  = "";
-  questionText.innerHTML = '';
+  questionText.innerHTML = ""
   questionText.innerHTML = questions[currentQuestion].question;
   var correctAnswer = questions[currentQuestion].answer;
 
@@ -177,20 +176,28 @@ function checkAnswer(givenAnswer, correctAnswer)
    {
     feedbackTxt.style.display = "block";
     feedbackTxt.innerHTML = "Correct";
-    console.log(feedbackTxt)
+    setTimeout(() => {
+      feedbackTxt.innerHTML = ""
+    }, 500);
+  
     userScore ++; 
     currentQuestion += 1;   
+    
     nextQuestion(currentQuestion);
     } 
     else {
     feedbackTxt.style.display = "block";
     feedbackTxt.innerHTML = "Wrong";
-    console.log(feedbackTxt)
+    setTimeout(() => {
+      feedbackTxt.innerHTML = ""
+    }, 500)
+  
     userScore = userScore;  
     currentQuestion += 1;
     timeleft = document.getElementById("time").innerHTML;
     //time penalty
     timeleft = timeleft-9;
+    feedbackTxt.innerHTML = "  ";
     clearInterval(downloadTimer);
     //reset time to 10 seconds less
     startTimer(timeleft);
@@ -231,7 +238,7 @@ function endQuiz ()
   while (choices.hasChildNodes()) {
   choices.removeChild(choices.firstChild);
   }
-  feedbackTxt.style.display = "none";
+  feedbackTxt.innerHTML = "";
   var endScreen = document.getElementById("end-screen");
   endScreen.style.display = "block";
   var finalScore = document.getElementById("final-score");
@@ -243,7 +250,7 @@ function endQuiz ()
    userInitials = document.getElementById("initials");
    var initials = userInitials.value.toUpperCase()
    scoreList.push({ initials: initials, score: userScore });
-   console.log
+   
    localStorage.setItem("scoreList", JSON.stringify(scoreList));
   });
   
