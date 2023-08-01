@@ -1,9 +1,6 @@
-
-
 const questionText = document.getElementById("question-title");
 var currentQuestion = 0;
 var userScore = 0;
-var numQuestions = 5;
 let questions = [
     {
         question: "Commonly used data types DO NOT Include _________",
@@ -61,7 +58,38 @@ let questions = [
         ]
     }
  ]
+ var numQuestions = questions.length;
+ var quesCount = 1;
  const totalScore = questions.length;
+ var timeleft = 100; 
+ var downloadTimer;
+
+function startTimer(timeleft, quesCount) {
+  downloadTimer = setInterval(function() 
+  {
+    timeleft = timeleft;
+    quesCount = quesCount;
+  
+    console.log("Time Left2:" + timeleft);
+    console.log("Ques Count2:" + quesCount);
+  
+    document.getElementById("time").innerHTML = timeleft;
+    timeleft --;
+    console.log("Timer" + downloadTimer);
+    if(timeleft <= 0 || quesCount == questions.length){
+       clearInterval(downloadTimer);
+       document.getElementById("time").innerHTML = "Finished";
+       endQuiz();}
+     else
+     {
+       document.getElementById("time").innerHTML = timeleft; 
+     }
+   }, 1000,timeleft, quesCount);
+};
+
+//  function timer(timeleft, quesCount, resetTime) {
+       
+//      }
  var element = document.getElementById("start");
  element.addEventListener("click", beginQuiz);
  //choices.addEventListener("click",submit);
@@ -69,26 +97,19 @@ let questions = [
   //to hide start Quiz screen
     var startScreen = document.getElementById("start-screen");
     startScreen.style.display = "none";
-    
-   
     currentQuestion = 0;
+    startTimer(timeleft, quesCount);
+  
     loadQuestion(currentQuestion);
  }
   function loadQuestion(currentQuestion)
   { 
-    
-    console.log("Loading..");
-    
-    questionText.innerHTML = '';
+     questionText.innerHTML = '';
     // totalScore.innerHTML = questions.length;
-    questionText.innerHTML = questions[currentQuestion].question;
-    console.log(questionText.innerHTML);
+    //Displays current question
+   questionText.innerHTML = questions[currentQuestion].question;
+   console.log(questionText.innerHTML);
     var correctAnswer = questions[currentQuestion].answer;
-//     <button id="myBtn" value="myvalue" onclick="myFunction()">Try it</button>
-//     const btn = document.createElement("BUTTON");
-//  btn.innerHTML = "I am a button";
-//  document.body.appendChild(btn);
-
 // Create buttons for answer choices
     var choices = document.getElementById("choices");
     
@@ -99,9 +120,7 @@ let questions = [
     Option1.addEventListener("click", (Option1) => { clickedBtn = event.target
      checkAnswer(clickedBtn.dataset.answer, correctAnswer);
      });
-  
-
-    
+      
     const Option2 = document.createElement("Button");
     choices.appendChild(Option2)
     Option2.innerHTML = questions[currentQuestion].answers[1].option;
@@ -109,7 +128,6 @@ let questions = [
     Option2.addEventListener("click", (Option2) => { clickedBtn = event.target
      checkAnswer(clickedBtn.dataset.answer, correctAnswer);
      });
-
 
    
     const Option3 = document.createElement("Button");
@@ -128,59 +146,46 @@ let questions = [
      checkAnswer(clickedBtn.dataset.answer, correctAnswer);
      });
   
+      
+  }
 
-// var buttons = document.getElementById("choices"); //returns a nodelist
-// for (var i= 0; i < buttons.length; i++)
-// {
-//     (function(index){
-//         buttons[index].addEventListener("click",function(index)
-//     })
-// }
-// choices.addEventListener("click", function(this.value)
-
-// {
-//     alert("clicked");
-//     console.log(value)
-// });
-// }
-
-// var buttons = document.getElementById('choices');
-// console.log(buttons);
-//  for (var i=0 ; i < buttons.length ; i++)
-//  {    
-//     console.log("hi");         
-//     buttons[i].addEventListener("click", function()
-//     {
-//         alert("I am button ");
-//     });
-            
-//  }
-
-
- }
+    function nextQuestion(currentQuestion){
         
-        
-// document.getElementById("choices").onclick = function(this)
-// {
-//     console.log(this);
-//     alert('clicked');
-// };
+      if (currentQuestion < numQuestions) {
+        console.log(currentQuestion);
+        console.log(numQuestions);
+        var choices = document.getElementById("choices")
+       
+        while (choices.hasChildNodes()) {
+            choices.removeChild(choices.firstChild);
+          }
     
-// for (let i = 0; i < buttons.length; i++) {
-//     console.log("loop through buttons");
-//   buttons[i].addEventListener("click", buttonsControl(i)); 
+        loadQuestion(currentQuestion);
+        
+      } 
+      else {
+            
+        console.log("Ending");
+        clearInterval(downloadTimer);
+        endQuiz();
+        
+        
+      }
+ }
 
-// }
 
-// function buttonsControl(i) {
-//   console.log("click logged")
-//   console.log(i);
-//   console.log(buttons.id);
-// }
+function endQuiz ()
+{
+  questionText.innerHTML = "End Of Quiz" + '<br>';
+  questionText.innerHTML += "Your score is:" + userScore + ' / ' + totalScore;
+  var choices = document.getElementById("choices")
+       
+        while (choices.hasChildNodes()) {
+            choices.removeChild(choices.firstChild);
+}
+}
 
 
-    //choices.addEventListener("click", checkAnswer(id, correctAnswer));
-  
 
  function checkAnswer(givenAnswer, correctAnswer) {
     // This is the function that will run, when clicked on one of the answers
@@ -191,30 +196,21 @@ let questions = [
         console.log("Given answer:" + givenAnswer);
         console.log("Actual answer:" + correctAnswer);
       if (givenAnswer == correctAnswer) {
-        userScore ++;      
-        console.log("Score: " + userScore);
-      } else {
+        userScore ++; 
+        quesCount ++;  
+        currentQuestion += 1;   
+        nextQuestion(currentQuestion);
+      } 
+      else {
         userScore = userScore;  
-        console.log("Score:" + userScore);                      
-      }
-      
-      if (currentQuestion < 4) {
-    
         currentQuestion += 1;
-        var choices = document.getElementById("choices")
-       
-        while (choices.hasChildNodes()) {
-            choices.removeChild(choices.firstChild);
-          }
-    
-        loadQuestion( currentQuestion);
-      } else {
-        var choices = document.getElementById("choices")
-       
-        while (choices.hasChildNodes()) {
-            choices.removeChild(choices.firstChild);
-        questionText.innerHTML = 'Done.Your score is:' + userScore + ' / ' + totalScore;
-        
+        quesCount ++;  
+        timeleft = document.getElementById("time").innerHTML;
+        timeleft = timeleft-9;
+       // resetTime = true;
+        clearInterval(downloadTimer);
+        startTimer(timeleft,quesCount);
+        nextQuestion(currentQuestion);
+                     
       }
- }
-}
+     }
