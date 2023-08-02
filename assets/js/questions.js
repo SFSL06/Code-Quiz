@@ -175,6 +175,8 @@ function checkAnswer(givenAnswer, correctAnswer)
   if (givenAnswer == correctAnswer) 
    {
     feedbackTxt.style.display = "block";
+
+    // Briefly display if answer is correct of wrong
     feedbackTxt.innerHTML = "Correct";
     setTimeout(() => {
       feedbackTxt.innerHTML = ""
@@ -187,17 +189,18 @@ function checkAnswer(givenAnswer, correctAnswer)
     } 
     else {
     feedbackTxt.style.display = "block";
+
+    // Briefly display if answer is correct of wrong
     feedbackTxt.innerHTML = "Wrong";
     setTimeout(() => {
       feedbackTxt.innerHTML = ""
-    }, 500)
+    }, 500);
   
     userScore = userScore;  
     currentQuestion += 1;
     timeleft = document.getElementById("time").innerHTML;
     //time penalty
     timeleft = timeleft-9;
-    feedbackTxt.innerHTML = "  ";
     clearInterval(downloadTimer);
     //reset time to 10 seconds less
     startTimer(timeleft);
@@ -238,7 +241,7 @@ function endQuiz ()
   while (choices.hasChildNodes()) {
   choices.removeChild(choices.firstChild);
   }
-  feedbackTxt.innerHTML = "";
+  
   var endScreen = document.getElementById("end-screen");
   endScreen.style.display = "block";
   var finalScore = document.getElementById("final-score");
@@ -250,8 +253,8 @@ function endQuiz ()
    userInitials = document.getElementById("initials");
    var initials = userInitials.value.toUpperCase()
    scoreList.push({ initials: initials, score: userScore });
-   
    localStorage.setItem("scoreList", JSON.stringify(scoreList));
+   
   });
   
 }

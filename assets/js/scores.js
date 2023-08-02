@@ -5,7 +5,7 @@ function getScores() {
     // Get scores saved in localStorage
     // Parsing the JSON string to an object
     let storedScoreList = JSON.parse(localStorage.getItem("scoreList"));
-     console.log(storedScoreList);
+     //console.log(storedScoreList);
     // If scores were retrieved from localStorage, update the scorelist array to it
     if (storedScoreList !== null) {
         scoreList = storedScoreList;
